@@ -1,16 +1,15 @@
 const Koa = require('koa');
-const Router = require('@koa/router');
+const bodyParser = require('koa-bodyparser');
+
 const config = require('./config/server');
+const users = require('./components/users/routes');
 
 const app = new Koa();
-const router = new Router();
 
-router.get('/', ctx => {
-  ctx.body = 'Hola mundo!!!';
-})
+app.use(bodyParser());
 
-app.use(router.routes());
-app.use(router.allowedMethods());
+app.use(users.prefix('/users').routes());
+app.use(users.allowedMethods());
 
 app.listen(config.api.port, () => {
   console.log(`API listen in port ${config.api.port}`);
